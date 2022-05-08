@@ -1,0 +1,3 @@
+audio/
+cogs/__pycache__/*
+.env
