@@ -1,4 +1,5 @@
 from dis import disco
+from operator import truediv
 import discord
 from discord.ext import commands
 
@@ -12,13 +13,13 @@ class PlaySound(commands.Cog):
     async def join(self, ctx : commands.Context):
         """Joins a voice channel"""
         self.joined = True
-        self.playing = True
         channel: discord.VoiceChannel = ctx.author.voice.channel
         await channel.connect()
         
     @commands.command()
     async def play(self, ctx : discord.TextChannel):
-        if self.playing:
+        if not self.playing:
+            self.playing = True
             guild = ctx.guild # Gets context guild
             voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild) # Gets bot's voice_client
             audio_source = discord.FFmpegPCMAudio('audio/test.mp3') # file to play over sound
@@ -27,9 +28,18 @@ class PlaySound(commands.Cog):
         else:
             await ctx.send('Can\'t play while already playing')
             self.stop(ctx)
-                
+
     @commands.command()
-    async def stop(self, ctx):
+    async def stop(self, ctx : discord.TextChannel):
+        self.playing = False
+        guild = ctx.guild
+        voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild)
+        if voice_client.is_playing():
+            voice_client.stop()
+
+    @commands.command()
+    async def leave(self, ctx):
+        self.playing = False
         guild = ctx.guild
         voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild)
         if voice_client.is_playing():
