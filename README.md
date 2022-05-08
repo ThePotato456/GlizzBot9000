@@ -12,4 +12,3 @@ pip3 install -r requirements.txt
 # Starts the bot script
 python main.py
 ```
-# GlizzBot9000
