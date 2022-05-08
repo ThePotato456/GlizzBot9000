@@ -3,7 +3,7 @@ This is a custom discord bot I've written in python with discord.py
 
 ## Requirements
 ```bash
-# Install python3 OpenCV and other requirements
+# Install python3 discord.py and other requirements
 pip3 install -r requirements.txt
 ```
 
@@ -12,4 +12,3 @@ pip3 install -r requirements.txt
 # Starts the bot script
 python main.py
 ```
-# GlizzBot9000
