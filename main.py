@@ -16,7 +16,7 @@ class Bot(commands.Bot):
     @commands.Cog.listener()
     async def on_ready(self):
         print('\nBOT] Logged in as {0} ({0.id})'.format(self.bot.user))
-        print('[!] Interact with it using the prefix \'{0}\'.'.format(self.bot.command_prefix))
+        print('[!] Interact with it using the prefix \'{0}\''.format(self.bot.command_prefix))
 
     def initialize_cogs(self):
         for file in os.listdir('./cogs'):
