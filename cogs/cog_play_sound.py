@@ -21,7 +21,6 @@ class PlaySound(commands.Cog):
                 print(e)
                 await ctx.send('[-] User is not in a joinable voice channel!')
         else:
-            self.joined = False
             await ctx.send("[-] Bot is already in another channel!")
 
     @commands.command()
