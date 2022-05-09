@@ -18,6 +18,7 @@ class PlaySound(commands.Cog):
                 channel: discord.VoiceChannel = ctx.author.voice.channel
                 await channel.connect()
             except Exception as e:
+                print(e)
                 await ctx.send('[-] User is not in a joinable voice channel!')
         else:
             self.joined = False
@@ -25,36 +26,47 @@ class PlaySound(commands.Cog):
 
     @commands.command()
     async def play(self, ctx : discord.TextChannel):
-        if not self.playing:
-            self.playing = True
-            guild = ctx.guild # Gets context guild
-            voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild) # Gets bot's voice_client
-            audio_source = discord.FFmpegPCMAudio('audio/test.mp3') # file to play over sound
-            if not voice_client.is_playing(): # if its not already playing, dont play it
-                voice_client.play(audio_source, after=None) # play the audio file
+        if self.joined:
+            if not self.playing:
+                self.playing = True
+                guild = ctx.guild # Gets context guild
+                voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild) # Gets bot's voice_client
+                audio_source = discord.FFmpegPCMAudio('audio/test.mp3') # file to play over sound
+                if not voice_client.is_playing(): # if its not already playing, dont play it
+                    voice_client.play(audio_source, after=None) # play the audio file
+            else:
+                await ctx.send('Can\'t play while already playing')
         else:
-            await ctx.send('Can\'t play while already playing')
-            await self.stop(ctx)
+            await ctx.send('[-] Bot isn\'t in any voice channel')
 
     @commands.command()
     async def stop(self, ctx : discord.TextChannel):
-        self.playing = False
-        guild = ctx.guild
-        voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild)
-        if voice_client.is_playing():
-            voice_client.stop()
+        if self.joined:
+            if self.playing:
+                self.playing = False
+                guild = ctx.guild
+                voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild)
+                if voice_client.is_playing():
+                    voice_client.stop()
+            else:
+                await ctx.send('[!] Bot isn\'t playing anything')
+        else:
+            await ctx.send('[!] Bot isn\'t in any voice channels')
 
     @commands.command()
     async def leave(self, ctx):
-        self.playing = False
-        self.joined = False
-        guild = ctx.guild
-        voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild)
-        if voice_client.is_playing():
-            voice_client.stop()
-            await voice_client.disconnect()
+        if self.joined:
+            self.playing = False
+            self.joined = False
+            guild = ctx.guild
+            voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild)
+            if voice_client.is_playing():
+                voice_client.stop()
+                await voice_client.disconnect()
+            else:
+                await voice_client.disconnect()
         else:
-            await voice_client.disconnect()
+            await ctx.send('[!] Bot isn\'t in any voice channels')
 
 def setup(bot):
     """Every cog needs a setup function like this."""
