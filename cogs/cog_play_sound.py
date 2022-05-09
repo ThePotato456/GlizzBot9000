@@ -12,10 +12,17 @@ class PlaySound(commands.Cog):
     @commands.command()
     async def join(self, ctx : commands.Context):
         """Joins a voice channel"""
-        self.joined = True
-        channel: discord.VoiceChannel = ctx.author.voice.channel
-        await channel.connect()
-        
+        if not self.joined:
+            try:
+                self.joined = True
+                channel: discord.VoiceChannel = ctx.author.voice.channel
+                await channel.connect()
+            except Exception as e:
+                await ctx.send('[-] User is not in a joinable voice channel!')
+        else:
+            self.joined = False
+            await ctx.send("[-] Bot is already in another channel!")
+
     @commands.command()
     async def play(self, ctx : discord.TextChannel):
         if not self.playing:
