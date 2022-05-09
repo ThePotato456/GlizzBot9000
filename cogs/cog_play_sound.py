@@ -31,7 +31,7 @@ class PlaySound(commands.Cog):
             voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild) # Gets bot's voice_client
             audio_source = discord.FFmpegPCMAudio('audio/test.mp3') # file to play over sound
             if not voice_client.is_playing(): # if its not already playing, dont play it
-                await voice_client.play(audio_source, after=None) # play the audio file
+                voice_client.play(audio_source, after=None) # play the audio file
         else:
             await ctx.send('Can\'t play while already playing')
             await self.stop(ctx)
