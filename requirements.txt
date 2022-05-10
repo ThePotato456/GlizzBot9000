@@ -1,3 +1,4 @@
-discord.py
+py-cord[voice]
+py-cord[speed]
 PyNaCL
 python-dotenv
