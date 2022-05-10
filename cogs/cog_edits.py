@@ -10,7 +10,7 @@ class CommandsCog(commands.Cog):
     
     @commands.Cog.listener()
     async def on_ready(self):
-        print("[cog_commands] listening for message edits....")
+        print("[cogs.cog_edits] listening for message edits....")
 
     @commands.Cog.listener()
     async def on_message_edit(self, before, after):

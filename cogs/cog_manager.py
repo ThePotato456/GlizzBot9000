@@ -25,7 +25,7 @@ class Dev(commands.Cog):
     # This is the decorator for events (inside of cogs).
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f"[cog_cogs_module] Eddie's cog_module loading.... Python {sysv.major}.{sysv.minor}.{sysv.micro} - Disord.py {discord.__version__}")
+        print(f"[cogs.cog_manager] Eddie's cog_manager loading.... Python {sysv.major}.{sysv.minor}.{sysv.micro} - Disord.py {discord.__version__}")
         # Prints on the shell the version of Python and Discord.py installed in our computer.
 
     
