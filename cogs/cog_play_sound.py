@@ -26,13 +26,11 @@ class PlaySound(commands.Cog):
     @commands.command()
     async def play(self, ctx : discord.TextChannel):
         if self.joined:
-            if not self.playing:
-                self.playing = True
-                guild = ctx.guild # Gets context guild
-                voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild) # Gets bot's voice_client
-                audio_source = discord.FFmpegPCMAudio('audio/test.mp3') # file to play over sound
-                if not voice_client.is_playing(): # if its not already playing, dont play it
-                    voice_client.play(audio_source, after=None) # play the audio file
+            guild = ctx.guild # Gets context guild
+            voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild) # Gets bot's voice_client
+            audio_source = discord.FFmpegPCMAudio('audio/test.mp3') # file to play over sound
+            if not voice_client.is_playing(): # if its not already playing, dont play it
+                voice_client.play(audio_source, after=None) # play the audio file
             else:
                 await ctx.send('Can\'t play while already playing')
         else:
@@ -41,12 +39,10 @@ class PlaySound(commands.Cog):
     @commands.command()
     async def stop(self, ctx : discord.TextChannel):
         if self.joined:
-            if self.playing:
-                self.playing = False
-                guild = ctx.guild
-                voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild)
-                if voice_client.is_playing():
-                    voice_client.stop()
+            guild = ctx.guild
+            voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild)
+            if voice_client.is_playing():
+                voice_client.stop()
             else:
                 await ctx.send('[!] Bot isn\'t playing anything')
         else:
