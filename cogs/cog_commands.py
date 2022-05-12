@@ -42,7 +42,7 @@ class CommandsCog(commands.Cog):
             wget.download(track['url'], 'downloads/{0}'.format(track['file_name']))
             video = VideoFileClip(os.path.join("downloads/",'{0}'.format(track['file_name'])))
             video.audio.write_audiofile(os.path.join("audio", '{0}.mp3'.format(track['file_name'].replace('.mp4', ''))), logger=None, verbose=True)
-            
+            # Rewrite
             file = discord.File('audio/{0}.mp3'.format(track['file_name'].replace('.mp4', '')))
             await ctx.send(file=file)
         else:
