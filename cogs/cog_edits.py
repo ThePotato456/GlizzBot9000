@@ -4,7 +4,7 @@ import discord
 from discord.ext import commands
 import datetime
 
-class CommandsCog(commands.Cog):
+class EditsCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
@@ -13,7 +13,7 @@ class CommandsCog(commands.Cog):
         print("[cogs.cog_edits] listening for message edits....")
 
     @commands.Cog.listener()
-    async def on_message_edit(self, before: discord.Message, after: discord.Message):
+    async def on_message_edit(self, before, after: discord):
         if not before.author.bot:
             #fmt = '**{0.author}** edited their message:\n{0.content} -> {1.content}'
             embed = discord.Embed(title="{0}".format(before.author), url="", description='**Message edited in: #{0}**'.format(before.channel.name), color=0x109319, timestamp=datetime.datetime.utcnow())
@@ -27,4 +27,4 @@ class CommandsCog(commands.Cog):
 
 def setup(bot: commands.Bot):
     """Every cog needs a setup function like this."""
-    bot.add_cog(CommandsCog(bot))
+    bot.add_cog(EditsCog(bot))
