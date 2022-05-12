@@ -1,7 +1,6 @@
-from dis import disco
-from operator import truediv
 import discord
 from discord.ext import commands
+import os 
 
 class PlaySound(commands.Cog):
     def __init__(self, bot : commands.Bot):
@@ -24,15 +23,25 @@ class PlaySound(commands.Cog):
             await ctx.send("[-] Bot is already in another channel!")
 
     @commands.command()
-    async def play(self, ctx : discord.TextChannel):
+    async def play(self, ctx: discord.TextChannel, arg):
+        valid_song = False
+        song = ''
+        for file in os.listdir('audio/'):
+            if arg == file:
+                valid_song = True
+                song = f'audio/{file}'
+
         if self.joined:
-            guild = ctx.guild # Gets context guild
-            voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild) # Gets bot's voice_client
-            audio_source = discord.FFmpegPCMAudio('audio/test.mp3') # file to play over sound
-            if not voice_client.is_playing(): # if its not already playing, dont play it
-                voice_client.play(audio_source, after=None) # play the audio file
+            if valid_song:
+                guild = ctx.guild # Gets context guild
+                voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild) # Gets bot's voice_client
+                audio_source = discord.FFmpegPCMAudio(song) # file to play over sound
+                if not voice_client.is_playing(): # if its not already playing, dont play it
+                    voice_client.play(audio_source, after=None) # play the audio file
+                else:
+                    await ctx.send('Can\'t play while already playing')
             else:
-                await ctx.send('Can\'t play while already playing')
+                await ctx.send('[!] Invalid song, song doesn\'t exist!')
         else:
             await ctx.send('[-] Bot isn\'t in any voice channel')
 
