@@ -71,6 +71,13 @@ class PlaySound(commands.Cog):
                 await voice_client.disconnect()
         else:
             await ctx.send('[!] Bot isn\'t in any voice channels')
+    
+    @commands.command()
+    async def list_songs(self, ctx: commands.Context):
+        songs = []
+        for file in os.listdir('audio/'):
+            songs.append(file)
+        await ctx.send('[+] Currently Playable Files: `{0}`'.format(songs))
 
 def setup(bot: commands.Bot):
     """Every cog needs a setup function like this."""

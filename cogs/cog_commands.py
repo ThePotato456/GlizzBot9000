@@ -1,10 +1,15 @@
 from dis import disco
 import json
 from pydoc import describe
-import string
+import shutil
 import discord
 from discord.ext import commands
 import datetime
+import wget 
+import os
+from subprocess import run, PIPE
+from moviepy.editor import *
+
 
 from pycoingecko import CoinGeckoAPI
 cg = CoinGeckoAPI()
@@ -21,6 +26,29 @@ class CommandsCog(commands.Cog):
     async def test(self, ctx: commands.Context, *args):
         arguments = ', '.join(args)
         await ctx.send(f'{len(args)} arguments: {arguments}')
+
+    @commands.command(name='download')
+    async def download_url(self, ctx: commands.Context, url: str):
+        p = run(['python3', 'RDtool.py', f'{url}', '-s'], stdout=PIPE, stdin=PIPE)
+        output = p.stdout.decode().split('\n')
+        track = {
+            'file_name' : output[0].replace(' ', '_').replace('-', '_').replace('__', '').lower(),
+            'url'       : output[1]
+        }
+
+        if not track['file_name'] in os.listdir('downloads/'):
+            track_info = json.dumps(track, indent=4)
+            track_info = json.loads(track_info)
+            wget.download(track['url'], 'downloads/{0}'.format(track['file_name']))
+            video = VideoFileClip(os.path.join("downloads/",'{0}'.format(track['file_name'])))
+            video.audio.write_audiofile(os.path.join("audio", '{0}.mp3'.format(track['file_name'].replace('.mp4', ''))), logger=None, verbose=True)
+            
+            file = discord.File('audio/{0}.mp3'.format(track['file_name'].replace('.mp4', '')))
+            await ctx.send(file=file)
+        else:
+            file = discord.File('audio/{0}.mp3'.format(track['file_name'].replace('.mp4', '')))
+            await ctx.send(file=file)
+
 
     @commands.command(name="cryptoprice")
     async def get_crypto_price(self, ctx: commands.Context, *args):
