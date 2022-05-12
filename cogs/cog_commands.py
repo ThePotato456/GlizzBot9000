@@ -13,6 +13,10 @@ class CommandsCog(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print("[cogs.cog_commands] Commands loaded!")
+
     @commands.command()
     async def test(self, ctx: commands.Context, *args):
         arguments = ', '.join(args)
