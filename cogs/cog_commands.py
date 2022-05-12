@@ -46,8 +46,10 @@ class CommandsCog(commands.Cog):
             file = discord.File('audio/{0}.mp3'.format(track['file_name'].replace('.mp4', '')))
             await ctx.send(file=file)
         else:
-            file = discord.File('audio/{0}.mp3'.format(track['file_name'].replace('.mp4', '')))
-            await ctx.send(file=file)
+            mp3_file = discord.File('audio/{0}.mp3'.format(track['file_name'].replace('.mp4', '')))
+            #mp4_file = discord.File('downloads/{0}'.format(track['file_name']))
+            await ctx.send(file=mp3_file)
+            #await ctx.send(file=mp4_file)
 
 
     @commands.command(name="cryptoprice")
