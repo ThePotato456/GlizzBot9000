@@ -26,6 +26,6 @@ class CommandsCog(commands.Cog):
         #await channel.send(fmt.format(before, after))
     
 
-def setup(bot : commands.Bot):
+def setup(bot: commands.Bot):
     """Every cog needs a setup function like this."""
     bot.add_cog(CommandsCog(bot))

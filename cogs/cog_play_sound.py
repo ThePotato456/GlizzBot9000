@@ -3,13 +3,13 @@ from discord.ext import commands
 import os 
 
 class PlaySound(commands.Cog):
-    def __init__(self, bot : commands.Bot):
+    def __init__(self, bot: commands.Bot):
         self.joined = False
         self.playing = False
         self.bot = bot
         
     @commands.command()
-    async def join(self, ctx : commands.Context):
+    async def join(self, ctx: commands.Context):
         """Joins a voice channel"""
         if not self.joined:
             try:
@@ -46,7 +46,7 @@ class PlaySound(commands.Cog):
             await ctx.send('[-] Bot isn\'t in any voice channel')
 
     @commands.command()
-    async def stop(self, ctx : discord.TextChannel):
+    async def stop(self, ctx: discord.TextChannel):
         if self.joined:
             guild = ctx.guild
             voice_client: discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild)
@@ -72,6 +72,6 @@ class PlaySound(commands.Cog):
         else:
             await ctx.send('[!] Bot isn\'t in any voice channels')
 
-def setup(bot):
+def setup(bot: commands.Bot):
     """Every cog needs a setup function like this."""
     bot.add_cog(PlaySound(bot))

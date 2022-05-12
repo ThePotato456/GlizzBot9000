@@ -132,6 +132,6 @@ class Dev(commands.Cog):
         else:
             await message.edit(content=f"{self.check_cog(cog)} has been reloaded.")
 
-def setup(bot):
+def setup(bot: commands.Bot):
     """Every cog needs a setup function like this."""
     bot.add_cog(Dev(bot))
