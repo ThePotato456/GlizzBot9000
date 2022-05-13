@@ -1,7 +1,4 @@
-from dis import disco
 import json
-from pydoc import describe
-import shutil
 import discord
 from discord.ext import commands
 import datetime
@@ -29,7 +26,7 @@ class CommandsCog(commands.Cog):
 
     @commands.command(name='download')
     async def download_url(self, ctx: commands.Context, url: str):
-        p = run(['python3', 'RDtool.py', f'{url}', '-s'], stdout=PIPE, stdin=PIPE)
+        p = run(['python3', 'RDtool.py', '{0}'.format(url), '-s'], stdout=PIPE, stdin=PIPE)
         output = p.stdout.decode().split('\n')
         track = {
             'file_name' : output[0].replace(' ', '_').replace('-', '_').replace('__', '').lower(),
