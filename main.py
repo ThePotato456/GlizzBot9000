@@ -34,5 +34,5 @@ class Bot(commands.Bot):
         self.bot.run(token)
 
 if __name__ == "__main__":
-    glizzy_bot = Bot(command_prefix='!')
+    glizzy_bot = Bot(command_prefix='?')
     glizzy_bot.run()
