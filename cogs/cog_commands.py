@@ -1,12 +1,10 @@
-from dis import disco
 import json
-from pydoc import describe
-import shutil
 import discord
 from discord.ext import commands
 import datetime
 import wget 
 import os
+import asyncio
 from subprocess import run, PIPE
 from moviepy.editor import *
 
@@ -29,26 +27,32 @@ class CommandsCog(commands.Cog):
 
     @commands.command(name='download')
     async def download_url(self, ctx: commands.Context, url: str):
-        p = run(['python3', 'RDtool.py', f'{url}', '-s'], stdout=PIPE, stdin=PIPE)
+        p = run(['python3', 'RDtool.py', '{0}'.format(url), '-s'], stdout=PIPE, stdin=PIPE)
         output = p.stdout.decode().split('\n')
+        print(output)
         track = {
             'file_name' : output[0].replace(' ', '_').replace('-', '_').replace('__', '').lower(),
             'url'       : output[1]
         }
+        download_messsage = await ctx.send('[*] File Name: {0}'.format(output[0].replace('webm', 'mp4')))
 
         if not track['file_name'] in os.listdir('downloads/'):
             track_info = json.dumps(track, indent=4)
             track_info = json.loads(track_info)
+            await download_messsage.edit(content='[*] Downloading file, this may take a seond....')
             wget.download(track['url'], 'downloads/{0}'.format(track['file_name']))
             video = VideoFileClip(os.path.join("downloads/",'{0}'.format(track['file_name'])))
             video.audio.write_audiofile(os.path.join("audio", '{0}.mp3'.format(track['file_name'].replace('.mp4', ''))), logger=None, verbose=True)
             # Rewrite
+            await download_messsage.edit(content='[*] Download complete! Sending file...')
             file = discord.File('audio/{0}.mp3'.format(track['file_name'].replace('.mp4', '')))
             await ctx.send(file=file)
         else:
+            download_messsage = await ctx.send('[+] Attaching file and sending....')
             mp3_file = discord.File('audio/{0}.mp3'.format(track['file_name'].replace('.mp4', '')))
             #mp4_file = discord.File('downloads/{0}'.format(track['file_name']))
             await ctx.send(file=mp3_file)
+            await download_messsage.edit(content='[*] Sent file')
             #await ctx.send(file=mp4_file)
 
 
