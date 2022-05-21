@@ -73,6 +73,15 @@ class CommandsCog(commands.Cog):
             await ctx.send(embed=embed)
         else:
             await ctx.send('[!] No currency specified.')
+    
+    @commands.command(name="ipinfo")
+    async def ipinfo(self, ctx: commands.Context, *args):
+        if len(args) == 1:
+            ipinfo = run(['ipinfo', f'{args[0]}', '--json'], stdout=PIPE, stdin=PIPE)
+            output = json.loads(ipinfo.stdout.decode())
+            await ctx.send(json.dumps(output, indent=4))
+
+
 
 def setup(bot: commands.Bot):
     """Every cog needs a setup function like this."""
